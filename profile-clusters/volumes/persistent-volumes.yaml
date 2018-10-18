@@ -1,4 +1,4 @@
-# Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+# Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ kind: PersistentVolume
 metadata:
   name: wso2apim-gateway-server-pv
   labels:
-    purpose: apim-shared-server
+    purpose: apim-gateway-shared-server
 spec:
   capacity:
     storage: 1Gi
@@ -36,6 +36,24 @@ metadata:
   name: wso2is-as-km-server-pv
   labels:
     purpose: is-as-km-shared-server
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: <NFS_SERVER_IP>
+    path: "<NFS_LOCATION_PATH>"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wso2apim-tm-server-pv
+  labels:
+    purpose: apim-tm-shared-server
 spec:
   capacity:
     storage: 1Gi

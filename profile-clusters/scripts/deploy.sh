@@ -82,7 +82,7 @@ ${KUBECTL} create secret docker-registry wso2creds --docker-server=docker.wso2.c
 ${KUBECTL} create --username=admin --password=${ADMIN_PASSWORD} -f ../../rbac/rbac.yaml
 
 echoBold 'Creating ConfigMaps...'
-# create the APIM IS as Key Manager ConfigMaps
+# create the IS as Key Manager ConfigMaps
 ${KUBECTL} create configmap is-as-km-conf --from-file=../confs/is-as-km/
 ${KUBECTL} create configmap is-as-km-conf-axis2 --from-file=../confs/is-as-km/axis2/
 ${KUBECTL} create configmap is-as-km-conf-datasources --from-file=../confs/is-as-km/datasources/
@@ -92,16 +92,21 @@ ${KUBECTL} create configmap apim-gateway-conf-axis2 --from-file=../confs/apim-ga
 # create the APIM Traffic Manager ConfigMaps
 ${KUBECTL} create configmap apim-tm-conf --from-file=../confs/apim-tm/
 ${KUBECTL} create configmap apim-tm-conf-axis2 --from-file=../confs/apim-tm/axis2/
+# create the APIM Publisher Store ConfigMaps
+${KUBECTL} create configmap apim-pubstore-conf --from-file=../confs/apim-pubstore/
+${KUBECTL} create configmap apim-pubstore-conf-axis2 --from-file=../confs/apim-pubstore/axis2/
+${KUBECTL} create configmap apim-pubstore-conf-datasources --from-file=../confs/apim-pubstore/datasources/
 
 ${KUBECTL} create configmap mysql-dbscripts --from-file=../extras/confs/rdbms/mysql/dbscripts/
 
 # deploy the Kubernetes services
-${KUBECTL} create -f ../is-as-km/wso2apim-is-as-km-service.yaml
 ${KUBECTL} create -f ../apim-gw/wso2apim-gateway-service.yaml
+${KUBECTL} create -f ../apim-pubstore/wso2apim-pubstore-service.yaml
 ${KUBECTL} create -f ../apim-tm/wso2apim-tm-1-service.yaml
 ${KUBECTL} create -f ../apim-tm/wso2apim-tm-2-service.yaml
 ${KUBECTL} create -f ../apim-tm/wso2apim-tm-3-service.yaml
-
+${KUBECTL} create -f ../apim-tm/wso2apim-tm-service.yaml
+${KUBECTL} create -f ../is-as-km/wso2apim-is-as-km-service.yaml
 
 echoBold 'Deploying persistent storage resources...'
 ${KUBECTL} create -f ../volumes/persistent-volumes.yaml
@@ -119,7 +124,12 @@ ${KUBECTL} create -f ../is-as-km/wso2apim-is-as-km-volume-claim.yaml
 ${KUBECTL} create -f ../is-as-km/wso2apim-is-as-km-deployment.yaml
 sleep 1m
 
+echoBold 'Deploying WSO2 API Manager Publisher and Store...'
+${KUBECTL} create -f ../apim-pubstore/wso2apim-pubstore-deployment.yaml
+sleep 1m
+
 echoBold 'Deploying WSO2 API Manager Traffic Manager...'
+${KUBECTL} create -f ../apim-tm/wso2apim-tm-volume-claim.yaml
 ${KUBECTL} create -f ../apim-tm/wso2apim-tm-1-deployment.yaml
 ${KUBECTL} create -f ../apim-tm/wso2apim-tm-2-deployment.yaml
 ${KUBECTL} create -f ../apim-tm/wso2apim-tm-3-deployment.yaml
@@ -132,5 +142,6 @@ sleep 1m
 
 echoBold 'Deploying Ingresses...'
 ${KUBECTL} create -f ../ingresses/wso2apim-gateway-ingress.yaml
+${KUBECTL} create -f ../ingresses/wso2apim-ingress.yaml
 
 echoBold 'Finished'

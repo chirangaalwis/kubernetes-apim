@@ -79,6 +79,8 @@ spec:
           containerPort: 7611
           protocol: "TCP"
         volumeMounts:
+        - name: apim-storage-volume
+          mountPath: /home/wso2carbon/wso2am-2.5.0/repository/deployment/server
         - name: apim-tm-3-conf
           mountPath: /home/wso2carbon/wso2-config-volume/repository/conf
         - name: apim-tm-3-conf-axis2
@@ -87,6 +89,9 @@ spec:
       imagePullSecrets:
       - name: wso2creds
       volumes:
+      - name: apim-storage-volume
+        persistentVolumeClaim:
+          claimName: wso2apim-tm-shared-server-volume-claim
       - name: apim-tm-3-conf
         configMap:
           name: apim-tm-conf

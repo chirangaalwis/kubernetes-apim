@@ -1,4 +1,4 @@
-# Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+# Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: wso2apim-gateway-ingress
+  name: wso2apim-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 spec:
   tls:
   - hosts:
-    - wso2apim-gateway
+    - wso2apim
   rules:
-  - host: wso2apim-gateway
+  - host: wso2apim
     http:
       paths:
       - path: /
         backend:
-          serviceName: wso2apim-gateway-service
-          servicePort: 8243
+          serviceName: wso2apim-pubstore-service
+          servicePort: 9443
