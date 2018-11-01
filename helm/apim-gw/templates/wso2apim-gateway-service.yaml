@@ -13,16 +13,28 @@
 # limitations under the License.
 
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: Service
 metadata:
-  name: wso2apim-tm-shared-artifacts-pvc
+  name: wso2apim-gateway-service
 spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: ""
+  # label keys and values that must match in order to receive traffic for this service
   selector:
-    matchLabels:
-      purpose: wso2apim-tm-shared-artifacts
+    deployment: wso2apim-gateway
+  ports:
+    # ports that this service should serve on
+    -
+      name: pass-through-http
+      protocol: TCP
+      port: 8280
+    -
+      name: pass-through-https
+      protocol: TCP
+      port: 8243
+    -
+      name: servlet-http
+      protocol: TCP
+      port: 9763
+    -
+      name: servlet-https
+      protocol: TCP
+      port: 9443

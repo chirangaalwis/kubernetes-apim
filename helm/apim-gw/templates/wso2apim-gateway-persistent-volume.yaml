@@ -13,16 +13,17 @@
 # limitations under the License.
 
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
-  name: wso2apim-tm-shared-artifacts-pvc
+  name: wso2apim-gateway-shared-artifacts-pv
+  labels:
+    purpose: wso2apim-gateway-shared-artifacts
 spec:
+  capacity:
+    storage: 1Gi
   accessModes:
     - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: ""
-  selector:
-    matchLabels:
-      purpose: wso2apim-tm-shared-artifacts
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: {{ .Values.serverIP }}
+    path: {{ .Values.sharedArtifactLocationPath }}

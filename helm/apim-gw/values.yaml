@@ -1,0 +1,4 @@
+namespace: "wso2"
+serviceAccount: "wso2svc-account"
+serverIP: "<NFS_SERVER_IP>"
+sharedArtifactLocationPath: "<NFS_LOCATION>"

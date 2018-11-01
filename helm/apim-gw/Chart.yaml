@@ -13,16 +13,7 @@
 # limitations under the License.
 
 apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: wso2apim-tm-shared-artifacts-pvc
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: ""
-  selector:
-    matchLabels:
-      purpose: wso2apim-tm-shared-artifacts
+appVersion: "2.5.0"
+description: A Helm chart for a deployment of Gateway profile of WSO2 API Manager
+name: wso2apim-gw
+version: 2.5.0-1
