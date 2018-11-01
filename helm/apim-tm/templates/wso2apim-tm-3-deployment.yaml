@@ -12,15 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: wso2is-km-deployment
-  namespace : {{ .Values.namespace }}
+  name: wso2apim-tm-3-deployment
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
     matchLabels:
-      deployment: wso2is-km-deployment
+      deployment: wso2apim-tm
+      node: wso2apim-tm-3
   replicas: 1
   minReadySeconds: 30
   strategy:
@@ -31,11 +32,12 @@ spec:
   template:
     metadata:
       labels:
-        deployment: wso2is-km-deployment
+        deployment: wso2apim-tm
+        node: wso2apim-tm-3
     spec:
       containers:
-      - name: wso2is-km
-        image: gcr.io/research-n-development-209206/wso2is-km:5.6.0
+      - name: wso2apim-tm
+        image: gcr.io/research-n-development-209206/wso2am-tm:2.5.0
         livenessProbe:
           exec:
             command:
@@ -57,13 +59,6 @@ spec:
             exec:
               command:  ['sh', '-c', '${WSO2_SERVER_HOME}/bin/wso2server.sh stop']
         imagePullPolicy: Always
-        resources:
-          requests:
-            memory: "2Gi"
-            cpu: "2000m"
-          limits:
-            memory: "3Gi"
-            cpu: "3000m"
         securityContext:
           runAsUser: 802
         ports:
@@ -73,28 +68,38 @@ spec:
         -
           containerPort: 9443
           protocol: "TCP"
+        -
+          containerPort: 5672
+          protocol: "TCP"
+        -
+          containerPort: 9711
+          protocol: "TCP"
+        -
+          containerPort: 9611
+          protocol: "TCP"
+        -
+          containerPort: 7711
+          protocol: "TCP"
+        -
+          containerPort: 7611
+          protocol: "TCP"
         volumeMounts:
-        - name: is-as-km-storage-volume
-          mountPath: /home/wso2carbon/wso2is-km-5.6.0/repository/deployment
-        - name: is-as-km-conf
+        - name: apim-storage-volume
+          mountPath: /home/wso2carbon/wso2am-2.5.0/repository/deployment/server
+        - name: apim-tm-3-conf
           mountPath: /home/wso2carbon/wso2-config-volume/repository/conf
-        - name: is-as-km-conf-axis2
+        - name: apim-tm-3-conf-axis2
           mountPath: /home/wso2carbon/wso2-config-volume/repository/conf/axis2
-        - name: is-as-km-conf-datasources
-          mountPath: /home/wso2carbon/wso2-config-volume/repository/conf/datasources
       serviceAccountName: {{ .Values.serviceAccount }}
 #      imagePullSecrets:
 #      - name: wso2creds
       volumes:
-      - name: is-as-km-storage-volume
+      - name: apim-storage-volume
         persistentVolumeClaim:
-          claimName: wso2is-km-shared-artifacts-pvc
-      - name: is-as-km-conf
+          claimName: wso2apim-tm-shared-artifacts-volume-claim
+      - name: apim-tm-3-conf
         configMap:
-          name: wso2is-km-conf
-      - name: is-as-km-conf-axis2
+          name: wso2apim-tm-conf
+      - name: apim-tm-3-conf-axis2
         configMap:
-          name: wso2is-km-conf-axis2
-      - name: is-as-km-conf-datasources
-        configMap:
-          name: wso2is-km-conf-datasources
+          name: wso2apim-tm-conf-axis2
