@@ -27,7 +27,7 @@ function echoBold () {
 }
 
 function usage () {
-    echoBold "This script automates the installation of WSO2 EI Integrator Analytics Kubernetes resources\n"
+    echoBold "This script automates the installation of WSO2 API Manager pattern 1 Kubernetes resources\n"
     echoBold "Allowed arguments:\n"
     echoBold "-h | --help"
     echoBold "--wu | --wso2-username\t\tYour WSO2 username"
